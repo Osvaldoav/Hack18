@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import LeftPanel from './LeftPanel';
 
-export default class App extends Component {
+export default class Pedidos extends React.Component {
   render() {
     return (
       <div>
-        <LeftPanel/>
+        {this.props.cafeteria}
       </div>
     );
   }
