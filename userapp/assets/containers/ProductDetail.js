@@ -38,7 +38,6 @@ class ProductDetail extends Component {
                         </Col>
                     </Grid>
                     </View>
-                    
                 </View>
             </Card>
         );

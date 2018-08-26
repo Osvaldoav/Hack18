@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Text, ScrollView, View} from 'react-native';
+import {Text, ScrollView, View, Image, TouchableOpacity} from 'react-native';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import Header from './Header';
@@ -8,6 +8,7 @@ import ProductDetail from './ProductDetail';
 import FooterBar from './FooterBar';
 import * as actions from '../actions';
 import AlimentoDetail from './AlimentoDetail';
+import Card from './Card';
 
 import Modal from 'react-native-modalbox';
 import QRScreen from './QRScreen';
@@ -24,34 +25,47 @@ class Alimentos extends Component{
           sliderValue: 0.3,
           ready: false
         };
-        this.callDataBase.bind(this);
       }
 
     callDataBase(){
-        const data =  
-            [{
-                Title: 'Hot Dogs',
-                Products: [{
-                    Title: 'Hot Dog',
-                    Description: '2 pzas',
-                    Price: 42,
-                    image: 'http://s3.amazonaws.com/wordpress-n77dj22gw2eczv6a/wp-content/uploads/sites/2/2017/08/29133438/Screen-Shot-2017-08-29-at-1.34.14-PM.png'
-                    },
-                    {
-                    Title: 'Bacon Cheese dog',
-                    Description: '1 pza',
-                    Price: 30,
-                    image: 'http://nathansfamousnorthmyrtlebeach.com/wp-content/uploads/2016/02/bacon-cheese-dog.png'
-                    },
-                    {
-                    Title: 'Papas a la francesa',
-                    Description: '',
-                    Price: 28,
-                    image: 'https://cdn.kiwilimon.com/recetaimagen/240/th5-640x426-2510.jpg'
-                    }
-                ]
-            }];
-        this.setState({data, ready: true});
+        const db = firebase.firestore();
+        const {selectedRestaurant} = this.props;
+        const settings = {timestampsInSnapshots: true};
+        db.settings(settings);
+        console.log("Este es....");
+        console.log(selectedRestaurant);
+
+        let platillos = [];
+
+        db.collection(selectedRestaurant.Title).get()
+        .then((snapshot) => {
+            const docData = snapshot.docs[0].data().subCollections;
+            const docId = snapshot.docs[0].id;
+            const subCollections = Object.keys(docData).map((key) => {
+                return docData[key];
+            });
+            Promise.all(subCollections.map((sub) => {
+                return this.getItems(selectedRestaurant.Title, docId, sub, db);
+            })).then((productsPool) => {
+                let products = [];
+                productsPool.forEach((p) => {
+                    products = [...products, ...p];
+                });
+                this.setState({products, productsLoaded: true});
+            });
+            //this.setState({products, productsLoaded: true, ready: true});
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+    }
+
+    getItems(collection, docId, sub, database) {
+        return database.collection(collection).doc(docId).collection(sub).get().then((snapshot) => {
+            return snapshot.docs.map(doc => {
+                return doc.data();
+            });
+        });
     }
 
     loading(){
@@ -59,7 +73,7 @@ class Alimentos extends Component{
             <View style={{ flex: 1, backgroundColor: '#fff'}}>
             <Header/>
             <ScrollView>
-                <Text>NADAAA</Text>
+                <Text>LOADING</Text>
             </ScrollView>
             <FooterBar/>
         </View>
@@ -71,32 +85,34 @@ class Alimentos extends Component{
     }
 
     renderProducts(){
-        products = undefined;
-        this.state.data.forEach(category => {
-            products = category.Products.map(pro => 
-                <AlimentoDetail key={pro.Title} product={pro}></AlimentoDetail> 
-            );
-        });
-        return products;
+        return this.state.products.map(product => 
+            <TouchableOpacity key={product.Title} onPress={() => {this.popupQR()}} activeOpacity={1}>
+                <AlimentoDetail product={product}></AlimentoDetail> 
+            </TouchableOpacity>
+        );
     }
 
     render(){
+        console.log(this.state.products);
         const {selectedRestaurant} = this.props;
+        const {detail, ImageStyle} = styles;
         if(!selectedRestaurant){
             return this.loading();
-        }else if (!this.state.ready){
+        }else if (!this.state.productsLoaded){
             this.callDataBase();
             return this.loading();
         }else{
             return(
                 <View style={{ flex: 1, backgroundColor: '#fff'}}>
+                    <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={"modal3"} isDisabled={this.state.isDisabled}>
+                        <QRScreen/>
+                    </Modal>
                     <Header/>
                     <ScrollView>
                         {this.renderProducts()}
                     </ScrollView>
                     <FooterBar/>
                 </View>
-    
             );
         }
 
@@ -120,7 +136,25 @@ const styles = {
       text: {
         color: "black",
         fontSize: 22
-      }
+      },
+      detail: {
+        borderWidth: 1,
+        borderColor: "#ddd",
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        marginLeft: 5,
+        marginRight: 5,
+        marginTop: 10,
+        paddingLeft: 5,
+        paddingRight: 5,
+      },
+      ImageStyle: {
+        height: 60,
+        width: 60,
+        borderRadius: 29
+    },
   }
 
 mapStateToProps = state => {
