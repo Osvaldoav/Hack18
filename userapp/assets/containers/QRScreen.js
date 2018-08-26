@@ -17,9 +17,9 @@ class QRScreen extends Component {
             <View style={styles.ContainerStyle}>
                 <Text>Especificaciones de tu pedido:</Text>
                 <TextInput multiline numberOfLines={4} style={{height: 100, width: 250,  borderWidth: 1,
-        borderColor: "#ddd",}} placeholder="Sin cebolla, poco tomate" editable />
-                        <Button block danger><Text>Cancel</Text></Button>
-                        <Button block success><Text>Add</Text></Button>
+        borderColor: "#ddd", marginTop: 10}} placeholder="Sin cebolla, poco tomate" editable />
+                        <Button block danger style={styles.margin}><Text>Cancel</Text></Button>
+                        <Button block success style={styles.margin}><Text>Add</Text></Button>
             </View>
         );
     }
@@ -31,6 +31,9 @@ const styles = {
         flex: 1,
         backgroundColor: '#fff',
         justifyContent: 'center'
+    },
+    margin: {
+        marginTop: 10,
     }
 };
 

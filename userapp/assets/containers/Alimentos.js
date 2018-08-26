@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Text, ScrollView, View, Image, TouchableOpacity} from 'react-native';
+import {Text, ScrollView, View, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import Header from './Header';
@@ -71,12 +71,10 @@ class Alimentos extends Component{
     loading(){
         return(
             <View style={{ flex: 1, backgroundColor: '#fff'}}>
-            <Header/>
-            <ScrollView>
-                <Text>LOADING</Text>
-            </ScrollView>
-            <FooterBar/>
-        </View>
+                <Header/>
+                <ActivityIndicator size="large"/>
+                <FooterBar/>
+            </View>
         );
     }
 
