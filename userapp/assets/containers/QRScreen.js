@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import { Actions } from 'react-native-router-flux';
+import * as actions from '../actions';
 
 class QRScreen extends Component {
     constructor(props){
@@ -17,6 +18,7 @@ class QRScreen extends Component {
     render(){
         const {product} = this.props;
         const {wachu} = this.props;
+        const {selectProduct} = this.props;
         return (
             <View style={styles.ContainerStyle}>
                 <Text style={{marginBottom: 5}}>Especificaciones de tu pedido:</Text>
@@ -38,6 +40,7 @@ class QRScreen extends Component {
                                     description: this.state.text,
                                     tupperId: 0,
                                     pedidoId: 231,
+                                    precio: product.Price,
                                     status: 'Confirmado'
                                 }
                                 const settings = {timestampsInSnapshots: true};
@@ -45,8 +48,8 @@ class QRScreen extends Component {
                                 db.collection("ordenesPendientes").doc("id_0").set(data).then(()=>{
                                     console.log('listo');
                                     Alert.alert('Pedido #231 confirmado!', 'Tu orden estara lista pronto', [{text: 'OK', onPress: () => console.log('OK Pressed')}], { cancelable: false });
+                                    selectProduct(product);
                                 });
-                                
                                 wachu.refs.modal3.close();
                             }}>
                             <Icon name='cart' />
@@ -71,4 +74,4 @@ const mapStateToProps = state => {
     return {product: state.selectedProduct};
 };
 
-export default connect(mapStateToProps)(QRScreen);
+export default connect(mapStateToProps, actions)(QRScreen);

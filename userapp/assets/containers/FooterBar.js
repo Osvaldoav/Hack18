@@ -35,7 +35,7 @@ class FooterBar extends Component {
                     <Icon name="search" style={iconStyle('search')} active={activeIconStyle('search')}/>
                     <Text style={textStyle('search')}>Search</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={button} onPress={() => {selectFooter('calendar')}} activeOpacity={1}>
+                <TouchableOpacity style={button} onPress={() => {selectFooter('calendar'); Actions.Pedidos()}} activeOpacity={1}>
                     <Icon name="calendar" style={iconStyle('calendar')} active={activeIconStyle('calendar')}/>
                     <Text style={textStyle('list')}>Today</Text>
                 </TouchableOpacity>

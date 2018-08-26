@@ -14,6 +14,7 @@ import SignIn from './assets/containers/SignIn';
 import Logout from './assets/containers/Logout';
 import Scanner from './assets/containers/Scanner';
 import Alimentos from './assets/containers/Alimentos';
+import Pedidos from './assets/containers/Pedidos';
 
 export default class App extends Component {
   
@@ -69,6 +70,7 @@ export default class App extends Component {
                     <Scene key="Products" component={ProductsList} hideNavBar/>
                     <Scene key="Scanner" component={Scanner} hideNavBar/>
                     <Scene key="Alimentos" component={Alimentos} hideNavBar/>
+                    <Scene key="Pedidos" component={Pedidos} hideNavBar/>
                 </Tabs>
             </Scene>
 
