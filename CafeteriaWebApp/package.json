@@ -26,6 +26,7 @@
     "@material-ui/core": "^1.5.1",
     "@material-ui/icons": "^2.0.3",
     "babel-preset-stage-1": "^6.1.18",
+    "firebase": "^5.4.1",
     "lodash": "^3.10.1",
     "office-ui-fabric-react": "^6.55.0",
     "react": "16.3.2",
