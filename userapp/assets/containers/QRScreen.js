@@ -2,17 +2,19 @@ import React, {Component} from 'react';
 import {View, Text, TextInput, Alert} from 'react-native';
 import {Button, Grid, Col, Icon} from 'native-base';
 import QRCode from 'react-native-qrcode';
-import { Title } from 'native-base';
+import { Title, TouchableOpacity } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import { Actions } from 'react-native-router-flux';
 import * as actions from '../actions';
+import TimePicker from 'react-native-simple-time-picker';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 class QRScreen extends Component {
     constructor(props){
         super(props);
-        this.state = {text: ''};
+        this.state = {text: '', selectedHours: 0, selectedMinutes: 0};
     }
 
     render(){
@@ -21,6 +23,13 @@ class QRScreen extends Component {
         const {selectProduct, selectPedido, selectFooter} = this.props;
         return (
             <View style={styles.ContainerStyle}>
+                <TimePicker
+                selectedHours={this.state.selectedHours}
+                selectedMinutes={this.state.selectedMinutes}
+                onChange={(hours, minutes) => this.setState({ selectedHours: hours, selectedMinutes: minutes })}
+                /> 
+                
+           
                 <Text style={{marginBottom: 5}}>Especificaciones de tu pedido:</Text>
                 <TextInput 
                     multiline numberOfLines={4} 
@@ -41,7 +50,9 @@ class QRScreen extends Component {
                                     tupperId: 0,
                                     pedidoId: 231,
                                     precio: product.Price,
-                                    status: 'Confirmado'
+                                    status: 'Confirmado',
+                                    hour: this.state.selectedHours,
+                                    minute: this.state.selectedMinutes
                                 }
                                 const settings = {timestampsInSnapshots: true};
                                 db.settings(settings);

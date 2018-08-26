@@ -16,7 +16,7 @@ class PedidoDetail extends Component {
         super(props);
     }
     render(){
-        const {Id, description, pedidoId, precio, product, status, tupperId, userId} = this.props.product;
+        const {Id, description, pedidoId, precio, product, status, tupperId, userId, hour, minute} = this.props.product;
         const {Data, Data2, TitleStyle, ImageStyle, TopViewStyle, BottomViewStyle, PointsStyle, ButtonStyle, ButtonTextStyle, StarTextStyle} = styles;
         return(
             <Card>
@@ -36,6 +36,9 @@ class PedidoDetail extends Component {
                 </View>
                 <View style={Data}>
                     <Text>Total ${precio}</Text>
+                </View>
+                <View style={Data}>
+                    <Text>Hora -> {hour}:{minute}</Text>
                 </View>
                 <View style={Data2}>
                     <Text style={{color: '#44f', fontWeight: 'bold'}}>Status: {status}</Text>
