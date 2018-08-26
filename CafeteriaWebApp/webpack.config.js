@@ -13,7 +13,7 @@ module.exports = {
         query: {
           presets: ['react', 'es2015', 'stage-1']
         }
-      }
+      },
     ]
   },
   resolve: {
@@ -26,5 +26,15 @@ module.exports = {
       aggregateTimeout: 300,
       poll: 1000
     }
-  }
+  },
+  test: /\.(gif|png|jpe?g|svg)$/i,
+  use: [
+    'file-loader',
+    {
+      loader: 'image-webpack-loader',
+      options: {
+        bypassOnDebug: true,
+      },
+    },
+  ],
 };

@@ -17,7 +17,8 @@ import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import Fastfood from '@material-ui/icons/Fastfood';
-import Pedidos from './Pedidos';
+import Pedidos from './MainPanel';
+import MainPanel from './MainPanel';
 
 const drawerWidth = 240;
 
@@ -43,7 +44,7 @@ const styles = theme => ({
       display: 'none',
     },
   },
-  toolbar: theme.mixins.toolbar,
+  // toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
     [theme.breakpoints.up('md')]: {
@@ -54,6 +55,7 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
+    overflow: 'auto'
   },
 });
 
@@ -78,14 +80,6 @@ class LeftPanel extends React.Component {
       <div className={classes.root}>
         <AppBar className={classes.appBar}>
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerToggle}
-              className={classes.navIconHide}
-            >
-              <MenuIcon />
-            </IconButton>
             <Typography variant="title" color="inherit" noWrap>
               {this.state.cafeteria}
             </Typography>
@@ -96,7 +90,7 @@ class LeftPanel extends React.Component {
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={this.state.mobileOpen}
-            onClose={this.handleDrawerToggle}
+            onClose={this.handleDrawerToggle} 
             classes={{
               paper: classes.drawerPaper,
             }}
@@ -115,6 +109,7 @@ class LeftPanel extends React.Component {
             }}
           >
             <div className={classes.toolbar} />
+                <div className='image'><img src={'../../TecLogo.png'} width='230px' height='60px' /></div>
                 <Divider />
                 <List>
                     <ListItem button onClick={() => this.changeCafe('Centrales')}>
@@ -144,7 +139,7 @@ class LeftPanel extends React.Component {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem button>
+                    <ListItem button onClick={() => this.changeCafe('Tuppers')}>
                     <ListItemIcon>
                         <CheckBox />
                     </ListItemIcon>
@@ -155,7 +150,7 @@ class LeftPanel extends React.Component {
         </Hidden>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Pedidos cafeteria={this.state.cafeteria}/>
+          <MainPanel cafeteria={this.state.cafeteria}/>
         </main>
       </div>
     );

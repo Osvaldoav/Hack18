@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-export default class Pedidos extends React.Component {
+export default class Tuppers extends Component {
   render() {
     return (
       <div>
-        {this.props.cafeteria}
+        Tuppers
       </div>
     );
   }
