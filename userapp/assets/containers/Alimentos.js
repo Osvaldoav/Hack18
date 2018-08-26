@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import ProductDetail from './ProductDetail';
 import FooterBar from './FooterBar';
 import * as actions from '../actions';
+import AlimentoDetail from './AlimentoDetail';
 
 import Modal from 'react-native-modalbox';
 import QRScreen from './QRScreen';
@@ -34,49 +35,23 @@ class Alimentos extends Component{
                     Title: 'Hot Dog',
                     Description: '2 pzas',
                     Price: 42,
-                    Image: 'http://s3.amazonaws.com/wordpress-n77dj22gw2eczv6a/wp-content/uploads/sites/2/2017/08/29133438/Screen-Shot-2017-08-29-at-1.34.14-PM.png'
+                    image: 'http://s3.amazonaws.com/wordpress-n77dj22gw2eczv6a/wp-content/uploads/sites/2/2017/08/29133438/Screen-Shot-2017-08-29-at-1.34.14-PM.png'
                     },
                     {
                     Title: 'Bacon Cheese dog',
                     Description: '1 pza',
                     Price: 30,
-                    Image: 'http://nathansfamousnorthmyrtlebeach.com/wp-content/uploads/2016/02/bacon-cheese-dog.png'
+                    image: 'http://nathansfamousnorthmyrtlebeach.com/wp-content/uploads/2016/02/bacon-cheese-dog.png'
                     },
                     {
                     Title: 'Papas a la francesa',
                     Description: '',
                     Price: 28,
-                    Image: 'https://cdn.kiwilimon.com/recetaimagen/240/th5-640x426-2510.jpg'
+                    image: 'https://cdn.kiwilimon.com/recetaimagen/240/th5-640x426-2510.jpg'
                     }
                 ]
             }];
         this.setState({data, ready: true});
-        // const db = firebase.firestore();
-        // const {selectedRestaurant} = this.props;
-        // const settings = {timestampsInSnapshots: true};
-        // db.settings(settings);
-        // console.log("Este es....");
-        // console.log(selectedRestaurant);
-        // db.collection(selectedRestaurant).doc('').get()
-        // .then((snapshot) => {
-        //     categories = [];
-        //     snapshot.forEach((doc) => {
-        //         //product = doc.data();
-        //         doc.get().then((snapshot) => {
-        //             snapshot.forEach((doc) => {
-        //                 //console.log(doc.data());
-        //             })
-        //         });
-        //         console.log(doc.get());
-        //         console.log("HELLOOOO");
-        //         //product.Id = doc.id;
-        //         //products.push(product);
-        //     });
-        //     this.setState({products, productsLoaded: true, ready: true});
-        // })
-        // .catch((err) => {
-        //     console.log('Error getting documents', err);
-        // });
     }
 
     loading(){
@@ -97,11 +72,9 @@ class Alimentos extends Component{
 
     renderProducts(){
         products = undefined;
-         this.state.data.forEach(category => {
+        this.state.data.forEach(category => {
             products = category.Products.map(pro => 
-                <View key={pro.Title}>
-                    <Text>{pro.Title}</Text>
-                </View>
+                <AlimentoDetail key={pro.Title} product={pro}></AlimentoDetail> 
             );
         });
         return products;
