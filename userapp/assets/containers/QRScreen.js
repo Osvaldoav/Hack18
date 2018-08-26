@@ -18,7 +18,7 @@ class QRScreen extends Component {
     render(){
         const {product} = this.props;
         const {wachu} = this.props;
-        const {selectProduct, selectPedido} = this.props;
+        const {selectProduct, selectPedido, selectFooter} = this.props;
         return (
             <View style={styles.ContainerStyle}>
                 <Text style={{marginBottom: 5}}>Especificaciones de tu pedido:</Text>
@@ -47,7 +47,7 @@ class QRScreen extends Component {
                                 db.settings(settings);
                                 db.collection("ordenesPendientes").doc("id_0").set(data).then(()=>{
                                     console.log('listo');
-                                    Alert.alert('Pedido #231 confirmado!', 'Tu orden estara lista pronto', [{text: 'OK', onPress: () => console.log('OK Pressed')}], { cancelable: false });
+                                    Alert.alert('Pedido #231 confirmado!', 'Tu orden estara lista pronto', [{text: 'OK', onPress: () => {selectFooter('calendar'); Actions.Pedidos()}}], { cancelable: false });
                                     selectPedido(true);
                                 });
                                 wachu.refs.modal3.close();
