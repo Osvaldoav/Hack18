@@ -4,7 +4,7 @@ import {Scene, Router, Tabs} from 'react-native-router-flux';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import firebase from 'firebase';
-import Expo from 'expo';
+import Expo, { Permissions, Notifications } from 'expo';
 
 import ProductsList from './assets/containers/ProductsList';
 import QRScreen from './assets/containers/QRScreen';
@@ -41,6 +41,45 @@ export default class App extends Component {
     });
 
     this.setState({ isReady: true });
+  }
+
+  async componentDidMount() {
+    await this.registerForPushNotificationsAsync();
+    this.notificationListener = Notifications.addListener(this._handleNotification);
+  }
+
+  componentWillUnmount() {
+    this.notificationListener && Notifications.remoceListener(this._handleNotification);
+  }
+
+  _handleNotification = (notification) => {
+    console.log(notification);
+  };
+
+  async registerForPushNotificationsAsync() {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+  
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+  
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+      return;
+    }
+  
+    // Get the token that uniquely identifies this device
+    let token = await Notifications.getExpoPushTokenAsync();
+
+    console.log(finalStatus, token);
   }
 
   render() {
