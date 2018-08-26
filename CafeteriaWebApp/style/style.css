@@ -1,0 +1,54 @@
+.home {
+   background-color: white;
+   align-items: center;
+   height: 700px;
+   width: 100%;
+}
+
+.box{
+    width: 1000px;
+    height: 300px;
+    margin: 0 auto;
+    background-color: antiquewhite;
+}
+
+.tooltip{
+    max-width: 100px;
+}
+
+.tupper{
+    margin-top: 65px;
+}
+
+
+.containerr{
+    width: 100%;
+    display: flex;
+}
+
+.matricula{
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.dias{
+    margin-top: 20px;
+    margin-left: 300px;
+}
+
+.boton{
+    margin-top: 12px;
+    margin-left: 570px;
+}
+
+.single-tupper{
+    margin: 0 auto;
+    margin-bottom: 15px;
+    width: 100%;
+    background-color: white;
+    height: 59px;
+    border-style: solid;
+    border-color:#E6E6E6;
+    border-width: 1px;
+    box-shadow: 1px 1px 1px  #BDBDBD;
+}
