@@ -18,3 +18,10 @@ export const selectRestaurant = (restaurant) => {
         payload: restaurant
     }
 }
+
+export const selectPedido = (pedido) => {
+    return {
+        type: 'select_pedido',
+        payload: pedido
+    }
+}

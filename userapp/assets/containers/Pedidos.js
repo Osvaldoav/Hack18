@@ -33,7 +33,7 @@ class Pedidos extends Component{
     dataBase(){
         const db = firebase.firestore();
         const settings = {timestampsInSnapshots: true};
-        const {selectProduct} = this.props;
+        const {selectPedido} = this.props;
         db.settings(settings);
         db.collection('ordenesPendientes').get()
         .then((snapshot) => {
@@ -45,7 +45,7 @@ class Pedidos extends Component{
             });
             this.setState({pedidos});
             this.setState({productsLoaded: true});
-            this.setState({first: false});
+            selectPedido(false);
         })
         .catch((err) => {
             console.log('Error getting documents', err);
@@ -79,16 +79,27 @@ class Pedidos extends Component{
     }
 
     render(){
-        
-        return(
-            <View style={styles.container}>
-                <Header headerText='Products List'/>
-                <ScrollView>
-                    {this.state.productsLoaded ? this.renderPrices() : null}
-                </ScrollView>
-                <FooterBar/>
-            </View>
-        );
+        if(this.props.selectedPedido == true){
+            this.dataBase();
+            return (
+                <View style={styles.container}>
+                    <Header headerText='Products List'/>
+                    <Text>Loading</Text>
+                    <FooterBar/>
+                </View>
+            );
+        }else{
+            return(
+                <View style={styles.container}>
+                    <Header headerText='Products List'/>
+                    <ScrollView>
+                        {this.state.productsLoaded ? this.renderPrices() : null}
+                    </ScrollView>
+                    <FooterBar/>
+                </View>
+            );
+        }
+
     }
 }
 
@@ -113,7 +124,7 @@ const styles = {
   }
 
 mapStateToProps = state => {
-    return {selectedProduct: state.selectedProduct};
+    return {selectedPedido: state.selectedPedido};
 } 
 
 export default connect(mapStateToProps, actions)(Pedidos);
