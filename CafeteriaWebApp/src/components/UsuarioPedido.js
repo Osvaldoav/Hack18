@@ -19,13 +19,18 @@ const styles = theme => ({
       fontSize: theme.typography.pxToRem(15),
       fontWeight: theme.typography.fontWeightRegular,
     },
+    expansion: {
+        // borderRadius: '15px',
+        marginBottom: '18px',
+        marginTop: '18px',
+    }
 });
 
 function Pedidos(props) {
     const { classes } = props;
     return (
       <div className={classes.root}>
-        <ExpansionPanel>
+        <ExpansionPanel className={classes.expansion}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}> #435 </Typography> <DetallesPedido/>
           </ExpansionPanelSummary>
@@ -33,7 +38,7 @@ function Pedidos(props) {
             <ProgresoPedido/>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel>
+        <ExpansionPanel className={classes.expansion}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}> #544 </Typography> <DetallesPedido/>
           </ExpansionPanelSummary>
@@ -41,7 +46,7 @@ function Pedidos(props) {
             <ProgresoPedido/>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel>
+        <ExpansionPanel className={classes.expansion}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}> #123 </Typography> <DetallesPedido/>
           </ExpansionPanelSummary>
@@ -49,7 +54,7 @@ function Pedidos(props) {
             <ProgresoPedido/>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel>
+        <ExpansionPanel className={classes.expansion}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}> #233 </Typography> <DetallesPedido/>
           </ExpansionPanelSummary>
@@ -57,7 +62,7 @@ function Pedidos(props) {
             <ProgresoPedido/>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel>
+        <ExpansionPanel className={classes.expansion}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}> #143 </Typography> <DetallesPedido/>
           </ExpansionPanelSummary>

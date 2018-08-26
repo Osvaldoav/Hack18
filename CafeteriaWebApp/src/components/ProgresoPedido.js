@@ -13,12 +13,14 @@ const styles = theme => ({
   },
   button: {
     marginRight: theme.spacing.unit,
+    backgroundColor: '#0033a0'
   },
   backButton: {
     marginRight: theme.spacing.unit,
   },
   completed: {
     display: 'inline-block',
+    backgroundColor: '#0033a0'
   },
   instructions: {
     marginTop: theme.spacing.unit,
