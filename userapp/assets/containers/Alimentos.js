@@ -25,6 +25,8 @@ class Alimentos extends Component{
           sliderValue: 0.3,
           ready: false
         };
+
+        this.renderProducts.bind(this);
       }
 
     callDataBase(){
@@ -85,15 +87,15 @@ class Alimentos extends Component{
     }
 
     renderProducts(){
+        const {selectProduct} = this.props;
         return this.state.products.map(product => 
-            <TouchableOpacity key={product.Title} onPress={() => {this.popupQR()}} activeOpacity={1}>
+            <TouchableOpacity key={product.Title} onPress={() => {selectProduct(product);this.popupQR()}} activeOpacity={1}>
                 <AlimentoDetail product={product}></AlimentoDetail> 
             </TouchableOpacity>
         );
     }
 
     render(){
-        console.log(this.state.products);
         const {selectedRestaurant} = this.props;
         const {detail, ImageStyle} = styles;
         if(!selectedRestaurant){
@@ -102,10 +104,11 @@ class Alimentos extends Component{
             this.callDataBase();
             return this.loading();
         }else{
+
             return(
                 <View style={{ flex: 1, backgroundColor: '#fff'}}>
                     <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={"modal3"} isDisabled={this.state.isDisabled}>
-                        <QRScreen/>
+                        <QRScreen wachu={this}/>
                     </Modal>
                     <Header/>
                     <ScrollView>
@@ -161,4 +164,4 @@ mapStateToProps = state => {
     return {selectedRestaurant: state.selectedRestaurant};
 }
 
-export default connect(mapStateToProps)(Alimentos);
+export default connect(mapStateToProps, actions)(Alimentos);
