@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {Text, View, Image} from 'react-native';
 import {Button, Icon} from 'native-base';
-import {Grid, Col} from 'native-base';
+import {Grid, Col, Row} from 'native-base';
 import Card from './Card';
 import QRScreen from './QRScreen';
 import { Actions } from 'react-native-router-flux';
@@ -10,33 +10,27 @@ import * as actions from '../actions';
 
 import Modal from 'react-native-modalbox';
 
-class ProductDetail extends Component {
+class AlimentoDetail extends Component {
 
     constructor(props){
         super(props);
     }
     render(){
-        const {Id, image, Points, Provider, Title, StarStyle} = this.props.product;
+        const {Title, Price, Description} = this.props.product;
         const {TitleStyle, ImageStyle, TopViewStyle, BottomViewStyle, PointsStyle, ButtonStyle, ButtonTextStyle, StarTextStyle} = styles;
+        
         return(
             <Card>
                 <View style={TopViewStyle}>
                     <View style = {{flex: 1}}>
-                        <Image style={ImageStyle} source={{uri: image}} resizeMode="center"/>
+                        <Image style={ImageStyle} source={{uri: this.props.product.Image}} resizeMode="center"/>
                     </View>
-                    <View style = {{flex: 2}}>
+                    <View style = {{flex: 3}}>
                         <Text style={TitleStyle}>{Title}</Text>
-                        <Text>{Provider}</Text>
+                        <Text>{Description}</Text>
                     </View>
-                    <View style = {{flex: 1}}>
-                    <Grid>
-                        <Col>
-                            <Image style={StarStyle} source={require('../images/star-icon.png')} resizeMode="center"/>                        
-                        </Col>
-                        <Col style={StarTextStyle}>
-                            <Text style={{color:"#eed229", fontWeight: "bold"}}>{Points}</Text>                        
-                        </Col>
-                    </Grid>
+                    <View style={{flex: 1}}>
+                        <Text style={{marginTop: 10, fontSize: 20}}>${Price}</Text>
                     </View>
                 </View>
             </Card>
@@ -93,4 +87,4 @@ const styles = {
     }
 };
 
-export default connect(null, actions)(ProductDetail);
+export default connect(null, actions)(AlimentoDetail);

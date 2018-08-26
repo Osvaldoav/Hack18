@@ -54,7 +54,7 @@ class ProductsList extends Component{
     renderPrices(){
         const {selectRestaurant} = this.props;
         return this.state.products.map(product => 
-            <TouchableOpacity key={product.Id} onPress={() => {selectRestaurant(product.Title);Actions.Alimentos()}} activeOpacity={1}>
+            <TouchableOpacity key={product.Id} onPress={() => {selectRestaurant(product);Actions.Alimentos()}} activeOpacity={1}>
                 <ProductDetail  product={product} moduleFunction={this.popupQR.bind(this)}></ProductDetail> 
             </TouchableOpacity>
         );

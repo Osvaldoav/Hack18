@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, Text, TextInput} from 'react-native';
+import {Button, Grid, Col} from 'native-base';
 import QRCode from 'react-native-qrcode';
 import { connect } from 'react-redux';
 
@@ -9,16 +10,16 @@ class QRScreen extends Component {
     }
 
     render(){
-        const {Id, Points} = this.props.product;
-        const str = Id + '|' + Points;
+        //const {Id, Points} = this.props.product;
+        //const str = Id + '|' + Points;
 
         return (
             <View style={styles.ContainerStyle}>
-                <QRCode
-                    value={str}
-                    size={200}
-                    bgColor='#000'
-                    fgColor='white'/>
+                <Text>Especificaciones de tu pedido:</Text>
+                <TextInput multiline numberOfLines={4} style={{height: 100, width: 250,  borderWidth: 1,
+        borderColor: "#ddd",}} placeholder="Sin cebolla, poco tomate" editable />
+                        <Button block danger><Text>Cancel</Text></Button>
+                        <Button block success><Text>Add</Text></Button>
             </View>
         );
     }
@@ -29,8 +30,7 @@ const styles = {
     ContainerStyle: {
         flex: 1,
         backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'center'
     }
 };
 

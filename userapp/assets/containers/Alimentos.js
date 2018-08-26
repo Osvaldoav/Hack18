@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Text, ScrollView, View} from 'react-native';
+import {Text, ScrollView, View, Image, TouchableOpacity} from 'react-native';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import Header from './Header';
@@ -7,6 +7,8 @@ import {connect} from 'react-redux';
 import ProductDetail from './ProductDetail';
 import FooterBar from './FooterBar';
 import * as actions from '../actions';
+import AlimentoDetail from './AlimentoDetail';
+import Card from './Card';
 
 import Modal from 'react-native-modalbox';
 import QRScreen from './QRScreen';
@@ -35,7 +37,7 @@ class Alimentos extends Component{
 
         let platillos = [];
 
-        db.collection(selectedRestaurant).get()
+        db.collection(selectedRestaurant.Title).get()
         .then((snapshot) => {
             const docData = snapshot.docs[0].data().subCollections;
             const docId = snapshot.docs[0].id;
@@ -43,7 +45,7 @@ class Alimentos extends Component{
                 return docData[key];
             });
             Promise.all(subCollections.map((sub) => {
-                return this.getItems(selectedRestaurant, docId, sub, db);
+                return this.getItems(selectedRestaurant.Title, docId, sub, db);
             })).then((productsPool) => {
                 let products = [];
                 productsPool.forEach((p) => {
@@ -82,14 +84,18 @@ class Alimentos extends Component{
         this.refs.modal3.open();
     }
 
-    renderPrices(){
-        return this.state.categories.map(product => 
-            <ProductDetail key={product.Id} product={product} moduleFunction={this.popupQR.bind(this)}></ProductDetail>
+    renderProducts(){
+        return this.state.products.map(product => 
+            <TouchableOpacity key={product.Title} onPress={() => {this.popupQR()}} activeOpacity={1}>
+                <AlimentoDetail product={product}></AlimentoDetail> 
+            </TouchableOpacity>
         );
     }
 
     render(){
+        console.log(this.state.products);
         const {selectedRestaurant} = this.props;
+        const {detail, ImageStyle} = styles;
         if(!selectedRestaurant){
             return this.loading();
         }else if (!this.state.productsLoaded){
@@ -98,13 +104,15 @@ class Alimentos extends Component{
         }else{
             return(
                 <View style={{ flex: 1, backgroundColor: '#fff'}}>
+                    <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={"modal3"} isDisabled={this.state.isDisabled}>
+                        <QRScreen/>
+                    </Modal>
                     <Header/>
                     <ScrollView>
-                        <Text>{this.props.selectedRestaurant}</Text>
+                        {this.renderProducts()}
                     </ScrollView>
                     <FooterBar/>
                 </View>
-    
             );
         }
 
@@ -128,7 +136,25 @@ const styles = {
       text: {
         color: "black",
         fontSize: 22
-      }
+      },
+      detail: {
+        borderWidth: 1,
+        borderColor: "#ddd",
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        marginLeft: 5,
+        marginRight: 5,
+        marginTop: 10,
+        paddingLeft: 5,
+        paddingRight: 5,
+      },
+      ImageStyle: {
+        height: 60,
+        width: 60,
+        borderRadius: 29
+    },
   }
 
 mapStateToProps = state => {
