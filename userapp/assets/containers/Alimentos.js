@@ -23,60 +23,47 @@ class Alimentos extends Component{
           sliderValue: 0.3,
           ready: false
         };
-        this.callDataBase.bind(this);
       }
 
     callDataBase(){
-        const data =  
-            [{
-                Title: 'Hot Dogs',
-                Products: [{
-                    Title: 'Hot Dog',
-                    Description: '2 pzas',
-                    Price: 42,
-                    Image: 'http://s3.amazonaws.com/wordpress-n77dj22gw2eczv6a/wp-content/uploads/sites/2/2017/08/29133438/Screen-Shot-2017-08-29-at-1.34.14-PM.png'
-                    },
-                    {
-                    Title: 'Bacon Cheese dog',
-                    Description: '1 pza',
-                    Price: 30,
-                    Image: 'http://nathansfamousnorthmyrtlebeach.com/wp-content/uploads/2016/02/bacon-cheese-dog.png'
-                    },
-                    {
-                    Title: 'Papas a la francesa',
-                    Description: '',
-                    Price: 28,
-                    Image: 'https://cdn.kiwilimon.com/recetaimagen/240/th5-640x426-2510.jpg'
-                    }
-                ]
-            }];
-        this.setState({data, ready: true});
-        // const db = firebase.firestore();
-        // const {selectedRestaurant} = this.props;
-        // const settings = {timestampsInSnapshots: true};
-        // db.settings(settings);
-        // console.log("Este es....");
-        // console.log(selectedRestaurant);
-        // db.collection(selectedRestaurant).doc('').get()
-        // .then((snapshot) => {
-        //     categories = [];
-        //     snapshot.forEach((doc) => {
-        //         //product = doc.data();
-        //         doc.get().then((snapshot) => {
-        //             snapshot.forEach((doc) => {
-        //                 //console.log(doc.data());
-        //             })
-        //         });
-        //         console.log(doc.get());
-        //         console.log("HELLOOOO");
-        //         //product.Id = doc.id;
-        //         //products.push(product);
-        //     });
-        //     this.setState({products, productsLoaded: true, ready: true});
-        // })
-        // .catch((err) => {
-        //     console.log('Error getting documents', err);
-        // });
+        const db = firebase.firestore();
+        const {selectedRestaurant} = this.props;
+        const settings = {timestampsInSnapshots: true};
+        db.settings(settings);
+        console.log("Este es....");
+        console.log(selectedRestaurant);
+
+        let platillos = [];
+
+        db.collection(selectedRestaurant).get()
+        .then((snapshot) => {
+            const docData = snapshot.docs[0].data().subCollections;
+            const docId = snapshot.docs[0].id;
+            const subCollections = Object.keys(docData).map((key) => {
+                return docData[key];
+            });
+            Promise.all(subCollections.map((sub) => {
+                return this.getItems(selectedRestaurant, docId, sub, db);
+            })).then((productsPool) => {
+                let products = [];
+                productsPool.forEach((p) => {
+                    products = [...products, ...p];
+                });
+                this.setState({products, productsLoaded: true});
+            });
+            //this.setState({products, productsLoaded: true, ready: true});
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+    }
+
+    getItems(collection, docId, sub, database) {
+        return database.collection(collection).doc(docId).collection(sub).get().then((snapshot) => {
+            return snapshot.docs.map(doc => {
+                return doc.data();
+            });
+        });
     }
 
     loading(){
@@ -84,7 +71,7 @@ class Alimentos extends Component{
             <View style={{ flex: 1, backgroundColor: '#fff'}}>
             <Header/>
             <ScrollView>
-                <Text>NADAAA</Text>
+                <Text>LOADING</Text>
             </ScrollView>
             <FooterBar/>
         </View>
@@ -95,23 +82,17 @@ class Alimentos extends Component{
         this.refs.modal3.open();
     }
 
-    renderProducts(){
-        products = undefined;
-         this.state.data.forEach(category => {
-            products = category.Products.map(pro => 
-                <View key={pro.Title}>
-                    <Text>{pro.Title}</Text>
-                </View>
-            );
-        });
-        return products;
+    renderPrices(){
+        return this.state.categories.map(product => 
+            <ProductDetail key={product.Id} product={product} moduleFunction={this.popupQR.bind(this)}></ProductDetail>
+        );
     }
 
     render(){
         const {selectedRestaurant} = this.props;
         if(!selectedRestaurant){
             return this.loading();
-        }else if (!this.state.ready){
+        }else if (!this.state.productsLoaded){
             this.callDataBase();
             return this.loading();
         }else{
@@ -119,7 +100,7 @@ class Alimentos extends Component{
                 <View style={{ flex: 1, backgroundColor: '#fff'}}>
                     <Header/>
                     <ScrollView>
-                        {this.renderProducts()}
+                        <Text>{this.props.selectedRestaurant}</Text>
                     </ScrollView>
                     <FooterBar/>
                 </View>
